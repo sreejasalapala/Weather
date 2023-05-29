@@ -1,0 +1,6 @@
+This is a page that we can get the weather of the below link cities 
+https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=12.9615&lon=77.7109&zoom=5
+
+just type any city name in the text box and click on "get weather forecast" button then we can get the city weather 
+
+and we can search multiple cities at a time also.
