@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast</title>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('cityForm');
+    var forecastContainer = document.getElementById('forecastContainer');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var citiesInput = document.getElementById('cities');
+        var cities = citiesInput.value.split(',');
+
+        // Clear previous forecast data
+        forecastContainer.innerHTML = '';
+
+        // Fetch weather data for each city
+        cities.forEach(function(city) {
+            var cityName = city.trim();
+
+            // Make API request to OpenWeatherMap
+            var apiKey = '3cd86eec09c95fc23aa52aae45bcedb1'; // Replace with your actual API key
+            var url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=' + apiKey;
+
+            fetch(url)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    // Process the weather forecast data for the city
+                    displayWeatherForecast(cityName, data);
+                })
+                .catch(function(error) {
+                    console.log('Error fetching weather data:', error);
+                });
+        });
+
+        // Clear the input field
+        citiesInput.value = '';
+    });
+
+    function displayWeatherForecast(cityName, data) {
+        var forecastData = data.list.slice(0, 14); // Slice the forecast data for 14 days
+
+        var cityForecastElement = document.createElement('div');
+        cityForecastElement.innerHTML = '<h2>' + cityName + '</h2>';
+
+        forecastData.forEach(function(forecast) {
+            // Extract relevant forecast information, e.g., temperature, weather description, date/time, etc.
+            var temperature = forecast.main.temp;
+            var weatherDescription = forecast.weather[0].description;
+            var dateTime = forecast.dt_txt;
+
+            // Create a new forecast element and append it to the cityForecastElement
+            var forecastElement = document.createElement('div');
+            forecastElement.innerHTML = '<p>Date/Time: ' + dateTime + '</p>' +
+                '<p>Temperature: ' + temperature + 'K</p>' +
+                '<p>Weather Description: ' + weatherDescription + '</p>';
+
+            cityForecastElement.appendChild(forecastElement);
+        });
+
+        forecastContainer.appendChild(cityForecastElement);
+    }
+});
+
+  </script>
+</head>
+<body>
+    <h1>Weather Forecast</h1>
+    <form id="cityForm">
+        <label for="cities">Enter city names (comma-separated):</label><br>
+        <input type="text" id="cities" name="cities"><br>   </br>
+
+        <button type="submit">Get Weather Forecast</button>
+    </form>
+
+    <div id="forecastContainer"></div>
+</body>
+</html>
